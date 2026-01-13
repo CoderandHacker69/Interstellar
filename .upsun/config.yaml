@@ -1,0 +1,38 @@
+# Upsun configuration, generated using AI at: 2026-01-13T16:35:39Z
+# AI can make mistakes. Please modify this file to suit your needs.
+applications:
+  interstellar:
+    type: nodejs:24
+
+    build:
+      flavor: none
+
+    hooks:
+      build: |
+        set -ex
+        pnpm install --prod
+
+    web:
+      commands:
+        start: node index.js
+
+      locations:
+        /:
+          root: static
+          passthru: true
+          allow: false
+
+        /api:
+          passthru: true
+
+        /health:
+          passthru: true
+
+    dependencies:
+      nodejs:
+        pnpm: '*'
+
+routes:
+  https://{default}/:
+    type: upstream
+    upstream: interstellar:http
